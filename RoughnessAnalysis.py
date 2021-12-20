@@ -22,21 +22,26 @@ def is_white(pixel):
 # activate "def is_black(pixel)"
 # change is_white to is_black in the "def find_border_points(image)"
 
-#def is_black(pixel):
-   #return not is_white(pixel)
+def is_black(pixel):
+   return not is_white(pixel)
 
 def find_border_points(image):
     return_value = np.array([[0,0]])
+
+    topLeftPixel = image.getpixel((0, 0))
+    isSEM = is_black(topLeftPixel)
+    isTEM = not isSEM
+
     for y in range(50, 1380):
         for x in range(300, 1750):
             pixel = image.getpixel((x, y))
-            if is_white(pixel):
+            if (isSEM and is_white(pixel)) or (isTEM and is_black(pixel)):
                 border_found = False
                 for neighborhood_y in range(y - 1, y + 2):
                     for neighborhood_x in range(x - 1, x + 2):
                         if not border_found:
                             neighborhood_pixel = image.getpixel((neighborhood_x, neighborhood_y))
-                            if not is_white(neighborhood_pixel):
+                            if (isSEM and is_black(neighborhood_pixel)) or (isTEM and is_white(neighborhood_pixel)):
                                 border_found = True
                                 point = np.array([[x,y]])
                                 return_value = np.append(return_value, point, axis = 0)
@@ -243,7 +248,7 @@ def plot_angles_and_distances(angles, distances):
 
 
 
-image = read_image("2101693 (2 kV)_T=20.tif")
+image = read_image("2101694 (2 kV)_T=30.tif")
 border_points = find_border_points(image)
 plot_border_points(image, border_points)
 center = calculate_center(image, border_points)
