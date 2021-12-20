@@ -3,10 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math as m
 from PIL import Image
-import pandas as pd
-from np import savetxt
-import csv
-# import xlsxwriter
 
 def read_image(path):
     return Image.open(path)
@@ -247,7 +243,7 @@ def plot_angles_and_distances(angles, distances):
 
 
 
-image = read_image("2101693 (2 kV)_T2.tif")
+image = read_image("2101693 (2 kV)_T=20.tif")
 border_points = find_border_points(image)
 plot_border_points(image, border_points)
 center = calculate_center(image, border_points)
