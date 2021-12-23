@@ -13,20 +13,57 @@ def is_white(pixel):
     else:
         return pixel[0] >= 150 and pixel[1] >= 150 and pixel[2] >= 150
 
-
-# SEM
-# deactivate "def is_black(pixel)"
-# is_white stays
-
-# TSEM and TEM
-# activate "def is_black(pixel)"
-# change is_white to is_black in the "def find_border_points(image)"
-
 def is_black(pixel):
    return not is_white(pixel)
 
+def contains(element, array):
+
+    for current in array:
+        if element[0] == current[0] and element[1] == current[1]:
+            return True
+
+    return False
+
+
+def get_neighbors(current, allpoints, process, chain):
+    neighbors = []
+
+    for point in allpoints:
+        if current[0] == point[0] and current[1] == point[1]:
+            continue
+
+        if abs(current[0] - point[0]) <= 1 and abs(current[1] - point[1]) <= 1:
+            if not contains(point, chain) and not contains(point, process):
+                neighbors.append(point)
+
+    return neighbors
+
+
+def create_chain(allpoints, process, chain):
+
+    chain.append(process[0])
+
+    neighbors = get_neighbors(process[0], allpoints, process, chain)
+    for neighbor in neighbors:
+        process.append(neighbor)
+
+    process.pop(0)
+
+    pass
+
+def find_chain(allpoints):
+    chain = []
+    process = []
+
+    process.append(allpoints[0])
+
+    while len(process) > 0:
+        create_chain(allpoints, process, chain)
+
+    return chain
+
 def find_border_points(image):
-    return_value = np.array([[0,0]])
+    all_points = np.array([[0,0]])
 
     topLeftPixel = image.getpixel((0, 0))
     isSEM = is_black(topLeftPixel)
@@ -44,14 +81,21 @@ def find_border_points(image):
                             if (isSEM and is_black(neighborhood_pixel)) or (isTEM and is_white(neighborhood_pixel)):
                                 border_found = True
                                 point = np.array([[x,y]])
-                                return_value = np.append(return_value, point, axis = 0)
+                                all_points = np.append(all_points, point, axis = 0)
                                 #print(point)
-    return np.delete(return_value, 0, 0)
+
+    all_points = np.delete(all_points, 0, 0)
+
+    print("Started finding real border")
+    border = find_chain(all_points)
+    print("Finished finding real border")
+
+    return border
 
 def plot_border_points(image, border_points):
     edited_image = image.copy()
     for point in border_points:
-        print(point)
+       # print(point)
         edited_image.putpixel((point[0], point[1]), (255, 0, 0, 255))
 
     #edited_image.show()
@@ -237,8 +281,6 @@ def plot_angles_and_distances(angles, distances):
     #plt.show()
     plt.savefig('_angles_and_distance.png')
 
-
-
     return
 
 #def save_data(angles, distances):
@@ -246,9 +288,7 @@ def plot_angles_and_distances(angles, distances):
   #  np.savetxt('angles_and_distances.csv', a, delimiter=',')
    # return
 
-
-
-image = read_image("2101694 (2 kV)_T=30.tif")
+image = read_image("2108293_T=4.tif")
 border_points = find_border_points(image)
 plot_border_points(image, border_points)
 center = calculate_center(image, border_points)
