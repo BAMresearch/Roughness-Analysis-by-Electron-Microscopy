@@ -1,3 +1,6 @@
+import skimage.io
+import skimage.color
+import skimage.filters
 import statistics
 import numpy as np
 import matplotlib.pyplot as plt
@@ -288,7 +291,17 @@ def plot_angles_and_distances(angles, distances):
   #  np.savetxt('angles_and_distances.csv', a, delimiter=',')
    # return
 
-image = read_image("2108293_T=4.tif")
+source = skimage.io.imread("2108293.tif")
+#thold = skimage.filters.threshold_mean(source)
+thold = skimage.filters.thresholding.apply_hysteresis_threshold(source, 0, 0.1)
+applied = source > thold
+colored = skimage.color.gray2rgb(applied)
+skimage.io.imsave("2108293_Threshold_mean.tif", colored)
+
+image = read_image("2108293_Threshold_mean.tif")
+#plt.imshow(image, cmap='gray')
+#plt.show()
+
 border_points = find_border_points(image)
 plot_border_points(image, border_points)
 center = calculate_center(image, border_points)
@@ -307,6 +320,20 @@ f = open("_distances_and_angles.csv", "w")
 for i in range(0, len(a)):
     f.write("{} {}\n".format(a[i], b[i]))
 f.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #df = pd.DataFrame({"distances", a, "angles", b})
 #df.to_csv("test.csv", index=False)
