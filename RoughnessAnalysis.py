@@ -27,7 +27,6 @@ def contains(element, array):
 
     return False
 
-
 def get_neighbors(current, allpoints, process, chain):
     neighbors = []
 
@@ -40,7 +39,6 @@ def get_neighbors(current, allpoints, process, chain):
                 neighbors.append(point)
 
     return neighbors
-
 
 def create_chain(allpoints, process, chain):
 
@@ -95,14 +93,14 @@ def find_border_points(image):
 
     return border
 
-def plot_border_points(image, border_points):
+def plot_border_points(sample_name, image, border_points):
     edited_image = image.copy()
     for point in border_points:
        # print(point)
         edited_image.putpixel((point[0], point[1]), (255, 0, 0, 255))
 
     #edited_image.show()
-    edited_image.save('_border.png')
+    edited_image.save(sample_name + '_border.png')
     return
 
 def calculate_initial_center(border_points):
@@ -158,13 +156,14 @@ def optimize_center(initial_center, border_points):
         current_stdev = statistics.stdev(current_distances)
 
     print("Final stdev is ", current_stdev)
+    print("Roughness is ", current_stdev)
 
     mean = statistics.mean(current_distances)
     print("Mean is ", mean)
 
     return optimized_center
 
-def draw_target(image, position, color):
+def draw_target(sample_name, image, position, color):
     image_copy = image.copy()
     for index in range(-25, 25):
         x = int(position[0])
@@ -173,20 +172,20 @@ def draw_target(image, position, color):
         image_copy.putpixel((x, (y + index)), color)
 
     #image_copy.show()
-    image_copy.save('_optimized_center.png')
+    image_copy.save(sample_name + '_optimized_center.png')
 
     return image_copy
 
 def calculate_center(image, border_points):
     initial_center = calculate_initial_center(border_points)
-    edited_image = draw_target(image, initial_center, (255, 0, 0, 255))
+    edited_image = draw_target(sample_name, image, initial_center, (255, 0, 0, 255))
 
     optimized_center = optimize_center(initial_center, border_points)
-    draw_target(edited_image, optimized_center, (0, 0, 255, 255))
+    draw_target(sample_name, edited_image, optimized_center, (0, 0, 255, 255))
     print("Optimized center is ", optimized_center)
     return optimized_center
 
-def plot_distance_distribution(distances):
+def plot_distance_distribution(sample_name, distances):
     x_array = []
 
     index = 0
@@ -221,12 +220,8 @@ def plot_distance_distribution(distances):
     N = len(distances)
     print("Number of detected border points is ", N)
 
-    plt.savefig('_distance_distribution.png')
+    plt.savefig(sample_name + '_distance_distribution.png')
     return
-
-def calculate_roughness(center, border_points):
-    # TODO write this function
-    return 10.45
 
 def calculate_distances(center, border_points):
     return_value = np.empty(0)
@@ -244,7 +239,6 @@ def calculate_distances(center, border_points):
 
     #print(return_value)
     return return_value
-
 
 def calculate_angles(center, border_points):
     return_value = np.empty(0)
@@ -268,7 +262,7 @@ def calculate_angles(center, border_points):
 
     return return_value
 
-def plot_angles_and_distances(angles, distances):
+def plot_angles_and_distances(sample_name, angles, distances):
     plt.plot(angles, distances, 'o', markersize=2)
     #plt.title('contour profile')
     plt.xlabel('Angle [degree]', fontsize=16)
@@ -282,44 +276,57 @@ def plot_angles_and_distances(angles, distances):
     #plt.ylim(np.min(distances)*0.9, np.max(distances)*1.1)
 
     #plt.show()
-    plt.savefig('_angles_and_distance.png')
+    plt.savefig(sample_name + '_angles_and_distance.png')
 
     return
 
-#def save_data(angles, distances):
- #   a = np.array([angles], [distances])
-  #  np.savetxt('angles_and_distances.csv', a, delimiter=',')
-   # return
+def save_data(sample_name, angles, distances):
+    a = np.array(distances)
+    b = np.array(angles)
+    f = open(sample_name + "_angles_and_distances.csv", "w")
 
-source = skimage.io.imread("2108293.tif")
-#thold = skimage.filters.threshold_mean(source)
-thold = skimage.filters.thresholding.apply_hysteresis_threshold(source, 0, 0.1)
-applied = source > thold
-colored = skimage.color.gray2rgb(applied)
-skimage.io.imsave("2108293_Threshold_mean.tif", colored)
+    for i in range(0, len(a)):
+        f.write("{} {}\n".format(a[i], b[i]))
 
-image = read_image("2108293_Threshold_mean.tif")
-#plt.imshow(image, cmap='gray')
-#plt.show()
+    f.close()
 
+    return
+
+def IsoData_threshold(source):
+    #blurred_image = skimage.filters.gaussian(source, sigma=1.0)
+    #plt.imshow(blurred_image, cmap='gray')
+    #plt.show()
+
+    thold = skimage.filters.threshold_isodata(source)
+    #thold = skimage.filters.threshold_mean(blurred_image)
+    #thold = skimage.filters.thresholding.apply_hysteresis_threshold(blurred_image, 0, 0.1)
+
+    print("Threshold is ", thold)
+
+    applied = source > thold
+    colored = skimage.color.gray2rgb(applied)
+    skimage.io.imsave(sample_name + "_IsoData_threshold.tif", colored)
+
+    #plt.imshow(image, cmap='gray')
+    #plt.show()
+
+    return thold
+
+
+sample_name = "2110553"
+image_path = sample_name + ".tif"
+source = skimage.io.imread(image_path)
+threshold = IsoData_threshold(source)
+image = read_image(sample_name + "_IsoData_threshold.tif")
 border_points = find_border_points(image)
-plot_border_points(image, border_points)
+plot_border_points(sample_name, image, border_points)
 center = calculate_center(image, border_points)
 distances = calculate_distances(center, border_points)
-plot_distance_distribution(distances)
-roughness = calculate_roughness(center, border_points)
-print("Roughness is ", roughness)
+plot_distance_distribution(sample_name, distances)
 angles = calculate_angles(center, border_points)
-plot_angles_and_distances(angles, distances)
-print("Roughness of this particle is ", roughness)
-
-a = np.array(distances)
-b = np.array(angles)
-f = open("_distances_and_angles.csv", "w")
-
-for i in range(0, len(a)):
-    f.write("{} {}\n".format(a[i], b[i]))
-f.close()
+plot_angles_and_distances(sample_name, angles, distances)
+save_data(sample_name, angles, distances)
+print("Threshold is ", threshold)
 
 
 
@@ -334,13 +341,3 @@ f.close()
 
 
 
-
-#df = pd.DataFrame({"distances", a, "angles", b})
-#df.to_csv("test.csv", index=False)
-
-#np.savetxt('angles_and_distances.csv', result, delimiter=',', fmt='%f')
-
-#np.savetxt('distances.csv', a, delimiter=',', header='distances', b, header='angles')
-#np.savetxt('angles.csv', b, delimiter=',')
-
-#save_data(angles, distances)
