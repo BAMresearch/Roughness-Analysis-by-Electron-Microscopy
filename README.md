@@ -44,3 +44,6 @@ If you use the code in your own work, please cite the above article.
 •	The final outcome of the python script is provide in the Terminal section of the PyCharm software.
 
 •	Roughness value of the single particle is provided as “Roughness is XX.XX” in nm.
+
+![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/03b89940-3b61-452f-92e1-2f184bb88fbd)
+
