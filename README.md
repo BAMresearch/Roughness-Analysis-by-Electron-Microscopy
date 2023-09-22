@@ -27,15 +27,15 @@ If you use the code in your own work, please cite the above article.
 
 • The python script will output 6 files per each evaluated EM image:
 
-![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/a1c89bbf-7e60-418f-9fb0-f1e28b16878f)
-
-    - Threshold image: “xxxx_IsoData_threshold.tif”
+    Threshold image: “xxxx_IsoData_threshold.tif”
     - Border detected: “xxxx_border.png” 
     - Optimized center: “xxxx_optimized_center.png”
     - Distribution of distances as histogram: “xxxx_distance_distribution.png”
     - Distribution of distances as a function of angles: “xxxx_angles_and_distance.png”
     - Distribution of distances as a function of angles in a csv file: “xxxx_angles_and_distance.csv”
-    
+
+![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/a1c89bbf-7e60-418f-9fb0-f1e28b16878f)
+
 •	The final outcome of the python script is provide in the Terminal section of the PyCharm software.
 
 •	Roughness value of the single particle is provided as “Roughness is XX.XX” in nm.
