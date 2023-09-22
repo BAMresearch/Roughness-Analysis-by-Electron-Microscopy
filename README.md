@@ -15,20 +15,25 @@ If you use the code in your own work, please cite the above article.
 
 • Copy the EM images that you want to evaluate into the folder where you downloaded the python script as “xxxx.tif”.
 
+![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/2e3f4812-4202-4b63-8c03-5542d08fd7f5)
+
 • In the python script, enter the name of the EM image file. The script detects itself whether it is an SEM, TEM, or TSEM image.
 
 ![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/7c5a0951-f772-4b57-a458-d8d3649e4898)
-
 
 • In the python script, enter the resolution of the EM image. 
 
 • Press the run button. 
 
-• The python script will output 5 files per each evaluated EM image:
+• The python script will output 6 files per each evaluated EM image:
+
+![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/a1c89bbf-7e60-418f-9fb0-f1e28b16878f)
 
     - Threshold image: “xxxx_IsoData_threshold.tif”
     
-    - Border detected: “xxxx_border.png” and optimized center: “xxxx_optimized_center.png”
+    - Border detected: “xxxx_border.png” 
+    
+    - Optimized center: “xxxx_optimized_center.png”
     
     - Distribution of distances as histogram: “xxxx_distance_distribution.png”
     
