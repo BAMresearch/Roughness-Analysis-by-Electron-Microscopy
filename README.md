@@ -27,17 +27,17 @@ If you use the code in your own work, please cite the above article.
 
 • The python script will output 6 files per each evaluated EM image:
 
-Threshold image: “xxxx_IsoData_threshold.tif”
+  - Threshold image: “xxxx_IsoData_threshold.tif”
 
-Border detected: “xxxx_border.png” 
+  - Border detected: “xxxx_border.png” 
 
-Optimized center: “xxxx_optimized_center.png”
+  - Optimized center: “xxxx_optimized_center.png”
 
-Distribution of distances as histogram: “xxxx_distance_distribution.png”
+  - Distribution of distances as histogram: “xxxx_distance_distribution.png”
 
-Distribution of distances as a function of angles: “xxxx_angles_and_distance.png”
+  - Distribution of distances as a function of angles: “xxxx_angles_and_distance.png”
 
-Distribution of distances as a function of angles in a csv file: “xxxx_angles_and_distance.csv”
+  - Distribution of distances as a function of angles in a csv file: “xxxx_angles_and_distance.csv”
 
 ![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/a1c89bbf-7e60-418f-9fb0-f1e28b16878f)
 
