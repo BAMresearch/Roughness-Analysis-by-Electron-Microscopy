@@ -16,6 +16,8 @@ If you use the code in your own work, please cite the above article.
 • Copy the EM images that you want to evaluate into the folder where you downloaded the python script as “xxxx.tif”.
 
 • In the python script, enter the name of the EM image file. The script detects itself whether it is an SEM, TEM, or TSEM image.
+![image](https://github.com/BAMresearch/Roughness-Analysis-by-Electron-Microscopy/assets/91262053/7c5a0951-f772-4b57-a458-d8d3649e4898)
+
 
 • In the python script, enter the resolution of the EM image. 
 
